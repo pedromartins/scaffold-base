@@ -1,0 +1,21 @@
+Name:                scaffold-base
+Version:             0.1
+Description:         Smart City Applications Framework Base Package
+License:             MIT
+Author:              Pedro Martins
+Maintainer:          pedromartins.pt@gmail.com
+Build-Type:          Simple
+Cabal-Version:       >=1.2
+
+Library
+  Build-Depends: base, bytestring, process, directory, network, configurator,
+                 text
+  Exposed-Modules:
+    Scaffold.Types
+    Scaffold.Prelude
+    Scaffold.Util
+    Scaffold.Register
+    Scaffold.Drivers.POSIX
+    Scaffold.Drivers.Fake
+
+  Hs-Source-Dirs: src
