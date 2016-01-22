@@ -1,5 +1,9 @@
-{-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE DeriveDataTypeable, MultiParamTypeClasses, ScopedTypeVariables, TemplateHaskell #-}
 module Scaffold.Types where
+
+import Data.Data
+import Network.XmlRpc.Internals
+import Network.XmlRpc.THDeriveXmlRpcType
 
 import Data.ByteString
 import Data.Data
@@ -45,4 +49,28 @@ type Backend = [Option] -> [DepReq] -> (Program, DepReq) -> IO ByteString
 
 -- TODO:Should be a newtype: String is not specific enough
 type Driver = String
+
+type NodeId = Int
+type NodeAddress = String
+data NodeCapRecord = NodeCapRecord { host :: Maybe NodeAddress, cap :: DepReq, driver :: String, user :: String }
+  deriving (Show, Data, Typeable)
+
+instance XmlRpcType DepReq where
+  toValue = ValueString . show
+  fromValue (ValueString s) = return $ read s
+  getType _ = TUnknown
+
+instance XmlRpcType () where
+  toValue () = ValueInt 0
+  fromValue _ = return ()
+  getType _ = TUnknown
+
+-- Note that THDeriveXmlRpcType handles Maybes in its own special way
+-- (existence of field)
+$(asXmlRpcStruct ''NodeCapRecord)
+
+instance (Show a, Read a) => (XmlRpcType (Maybe a)) where
+  toValue = ValueString . show
+  fromValue (ValueString s) = return $ read s
+  getType _ = TUnknown
 

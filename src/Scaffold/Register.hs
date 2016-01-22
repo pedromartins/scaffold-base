@@ -21,19 +21,21 @@ queryCpu = return ("cpu", "N/A")
 queryHD :: IO Attribute
 queryHD = return ("HD", "N/A")
 
-readSensorConfig :: FilePath -> IO (String, String)
+readSensorConfig :: FilePath -> IO (String, String, String)
 readSensorConfig f = do
   cfg <- Cfg.load [ Cfg.Required f ]
   query <- Cfg.lookup cfg (T.pack "sensor.query")
   driver <- Cfg.lookup cfg (T.pack "sensor.driver")
-  return (fromJust query, fromJust driver)
+  user <- Cfg.lookup cfg (T.pack "sensor.user")
+  return (fromJust query, fromJust driver, fromJust user)
 
-readActuatorConfig :: FilePath -> IO (String, String)
+readActuatorConfig :: FilePath -> IO (String, String, String)
 readActuatorConfig f = do
   cfg <- Cfg.load [ Cfg.Required f ]
   query <- Cfg.lookup cfg (T.pack "actuator.command")
   driver <- Cfg.lookup cfg (T.pack "actuator.driver")
-  return (fromJust query, fromJust driver)
+  user <- Cfg.lookup cfg (T.pack "actuator.user")
+  return (fromJust query, fromJust driver, fromJust user)
 
 getFilesRec d = do
   nodes <- listDirectory d
@@ -43,11 +45,11 @@ getFilesRec d = do
 
 -- TODO: Change so that the files can be anywhere within .scaffold.d
 readConfig = do
-  homeDirectory <- getHomeDirectory
-  sensorPaths <- getDirectoryContents $ homeDirectory ++ "/.scaffold.d/sensors"
-  actuatorPaths <- getDirectoryContents $ homeDirectory ++ "/.scaffold.d/actuators"
-  sensorFiles <- filterM isFile . map ((homeDirectory ++ "/.scaffold.d/sensors/") ++) $ sensorPaths
-  actuatorFiles <- filterM isFile . map ((homeDirectory ++ "/.scaffold.d/actuators/") ++) $ actuatorPaths
+  let rootDirectory = "/etc"
+  sensorPaths <- getDirectoryContents $ rootDirectory ++ "/.scaffold.d/sensors"
+  actuatorPaths <- getDirectoryContents $ rootDirectory ++ "/.scaffold.d/actuators"
+  sensorFiles <- filterM isFile . map ((rootDirectory ++ "/.scaffold.d/sensors/") ++) $ sensorPaths
+  actuatorFiles <- filterM isFile . map ((rootDirectory ++ "/.scaffold.d/actuators/") ++) $ actuatorPaths
   sensors <- mapM readSensorConfig sensorFiles
   actuators <- mapM readActuatorConfig actuatorFiles
   return (sensors, actuators)

@@ -9,7 +9,7 @@ Cabal-Version:       >=1.2
 
 Library
   Build-Depends: base, bytestring, process, directory, network, configurator,
-                 text
+                 text, convertible
   Exposed-Modules:
     Scaffold.Types
     Scaffold.Prelude
@@ -18,4 +18,9 @@ Library
     Scaffold.Drivers.POSIX
     Scaffold.Drivers.Fake
 
+  Hs-Source-Dirs: src
+
+Executable scaffold
+  Build-Depends: base, hdaemonize, haxr
+  Main-is: Scaffold/Main.hs
   Hs-Source-Dirs: src
