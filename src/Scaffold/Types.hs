@@ -1,11 +1,11 @@
-{-# LANGUAGE DeriveDataTypeable, MultiParamTypeClasses, ScopedTypeVariables, FlexibleInstances #-}
+{-# LANGUAGE DeriveDataTypeable, MultiParamTypeClasses, ScopedTypeVariables, TemplateHaskell #-}
 module Scaffold.Types where
 
-import Data.MessagePack.Object
 import Data.Data
+import Network.XmlRpc.Internals
+import Network.XmlRpc.THDeriveXmlRpcType
 
 import Data.ByteString
-import qualified Data.Text as T
 import Data.Data
 
 type DataQuery = String
@@ -53,15 +53,24 @@ type Driver = String
 type NodeId = Int
 type NodeAddress = String
 data NodeCapRecord = NodeCapRecord { host :: Maybe NodeAddress, cap :: DepReq, driver :: String, user :: String }
-  deriving (Show, Data, Typeable, Read)
+  deriving (Show, Data, Typeable)
 
-instance MessagePack DepReq where
-  toObject = ObjectStr . T.pack . show
-  fromObject (ObjectStr s) = Just (read . T.unpack $ s)
-  fromObject _             = Nothing
+instance XmlRpcType DepReq where
+  toValue = ValueString . show
+  fromValue (ValueString s) = return $ read s
+  getType _ = TUnknown
 
-instance MessagePack NodeCapRecord where
-  toObject = ObjectStr . T.pack . show
-  fromObject (ObjectStr s) = Just (read . T.unpack $ s)
-  fromObject _             = Nothing
+instance XmlRpcType () where
+  toValue () = ValueInt 0
+  fromValue _ = return ()
+  getType _ = TUnknown
+
+-- Note that THDeriveXmlRpcType handles Maybes in its own special way
+-- (existence of field)
+$(asXmlRpcStruct ''NodeCapRecord)
+
+instance (Show a, Read a) => (XmlRpcType (Maybe a)) where
+  toValue = ValueString . show
+  fromValue (ValueString s) = return $ read s
+  getType _ = TUnknown
 

@@ -9,7 +9,7 @@ Cabal-Version:       >=1.2
 
 Library
   Build-Depends: base, bytestring, process, directory, network, configurator,
-                 text, convertible, transformers, msgpack, msgpack-rpc
+                 text, convertible
   Exposed-Modules:
     Scaffold.Types
     Scaffold.Prelude
@@ -21,6 +21,6 @@ Library
   Hs-Source-Dirs: src
 
 Executable scaffold
-  Build-Depends: base, hdaemonize, transformers, msgpack, msgpack-rpc
+  Build-Depends: base, hdaemonize, haxr
   Main-is: Scaffold/Main.hs
   Hs-Source-Dirs: src
