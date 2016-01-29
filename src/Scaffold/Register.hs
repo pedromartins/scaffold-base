@@ -1,6 +1,7 @@
 {-# LANGUAGE CPP #-}
 module Scaffold.Register where
 
+import Control.Applicative
 import Data.Maybe
 import Control.Monad
 import System.Directory
