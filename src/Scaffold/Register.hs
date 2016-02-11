@@ -47,10 +47,10 @@ getFilesRec d = do
 -- TODO: Change so that the files can be anywhere within .scaffold.d
 readConfig = do
   let rootDirectory = "/etc"
-  sensorPaths <- getDirectoryContents $ rootDirectory ++ "/.scaffold.d/sensors"
-  actuatorPaths <- getDirectoryContents $ rootDirectory ++ "/.scaffold.d/actuators"
-  sensorFiles <- filterM isFile . map ((rootDirectory ++ "/.scaffold.d/sensors/") ++) $ sensorPaths
-  actuatorFiles <- filterM isFile . map ((rootDirectory ++ "/.scaffold.d/actuators/") ++) $ actuatorPaths
+  sensorPaths <- getDirectoryContents $ rootDirectory ++ "/scaffold.d/sensors"
+  actuatorPaths <- getDirectoryContents $ rootDirectory ++ "/scaffold.d/actuators"
+  sensorFiles <- filterM isFile . map ((rootDirectory ++ "/scaffold.d/sensors/") ++) $ sensorPaths
+  actuatorFiles <- filterM isFile . map ((rootDirectory ++ "/scaffold.d/actuators/") ++) $ actuatorPaths
   sensors <- mapM readSensorConfig sensorFiles
   actuators <- mapM readActuatorConfig actuatorFiles
   return (sensors, actuators)
