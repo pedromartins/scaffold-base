@@ -9,7 +9,7 @@ Cabal-Version:       >=1.2
 
 Library
   Build-Depends: base, bytestring, process, directory, network, configurator,
-                 text, convertible
+                 text, convertible, dnssd
   Exposed-Modules:
     Scaffold.Types
     Scaffold.Prelude
@@ -17,6 +17,8 @@ Library
     Scaffold.Register
     Scaffold.Drivers.POSIX
     Scaffold.Drivers.Fake
+    Scaffold.Config
+    Scaffold.DNSSD
 
   Hs-Source-Dirs: src
 

@@ -96,3 +96,7 @@ read = Prelude.read
 
 bind :: (Monad m) => m a -> (a -> m b) -> m b
 bind = (Prelude.>>=)
+
+ap :: IO (a -> b) -> IO a -> IO b
+ap = (Prelude.<*>)
+

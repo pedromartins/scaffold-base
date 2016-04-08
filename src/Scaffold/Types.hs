@@ -39,6 +39,10 @@ data Program = PVar Ident
              | PConstr Ident
              | Seq Program Program
              | PExecve String
+             | PLet [(Ident, Program)] Program
+             | POp Ident
+             | PIntLit Integer
+             | PStringLit String
              deriving (Eq, Show)
 
 -- TODO:Should be a newtype: ByteString is not specific enough
