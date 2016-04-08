@@ -47,8 +47,8 @@ getFilesRec d = do
 -- TODO: Change so that the files can be anywhere within .scaffold.d
 readConfig = do
   let rootDirectory = "/etc"
-      sensorRoot = rootDirectory ++ "/scaffold.d/sensors"
-      actuatorRoot = rootDirectory ++ "/scaffold.d/actuators"
+      sensorRoot = rootDirectory ++ "/scaffold.d/sensors/"
+      actuatorRoot = rootDirectory ++ "/scaffold.d/actuators/"
   sensorRootExists <- isDirectory sensorRoot
   actuatorRootExists <- isDirectory actuatorRoot
   sensorPaths <- if sensorRootExists then getDirectoryContents sensorRoot else return []

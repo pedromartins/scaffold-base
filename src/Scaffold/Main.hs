@@ -10,6 +10,7 @@ import System.Environment
 
 import Scaffold.Types
 import Scaffold.Register
+import Scaffold.Util
 
 import Network.XmlRpc.Client
 import Network.XmlRpc.Internals
@@ -24,8 +25,7 @@ main = do
   serviced' $ simpleDaemon
     { program = \_ -> forever $ do
         -- TODO: get ip (dynip) of registry
-        (_, oh, _, _) <- runInteractiveCommand "curl http://www.doc.ic.ac.uk/~pm1108/scaffold/dynIP"
-        r <- hGetContents oh
+        r <- getRegistry
         let remoteRegister = remote r "register" :: NodeCapRecord -> IO ()
         (sensors, actuators) <- readConfig
         mapM (\(s,sd,u) -> remoteRegister (NodeCapRecord (Just ip) (Provides s) sd u)) sensors
