@@ -24,6 +24,11 @@ readPortConfig = do
    cfg <- getScaffoldConf
    fmap read $ Cfg.lookupDefault "1234" cfg (T.pack "port")
 
+readSshPortConfig :: IO Integer
+readSshPortConfig = do
+  cfg <- getScaffoldConf
+  fmap read $ Cfg.lookupDefault "22" cfg (T.pack "sshport")
+
 readRegistryConfig :: IO String
 readRegistryConfig = do
   cfg <- getScaffoldConf
