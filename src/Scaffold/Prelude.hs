@@ -108,3 +108,4 @@ instance (a ~ a', b ~ b') => Ap (IO (a -> IO b)) (IO a') (IO b') where
 instance (a ~ a', b ~ b') => Ap (IO (a -> b)) (IO a') (IO b') where
   ap mf mx = mf <*> mx
 
+type IntT = Integer
