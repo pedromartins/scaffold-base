@@ -1,3 +1,5 @@
+{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances, FunctionalDependencies,
+  GADTs, UndecidableInstances, OverlappingInstances #-}
 module Scaffold.Prelude where
 
 import Control.Concurrent
@@ -74,7 +76,7 @@ lookup = Prelude.lookup
 
 readIORef = Data.IORef.readIORef
 
-ret :: (Monad m) => a -> m a
+ret :: a -> IO a
 ret = Prelude.return
 
 threshold :: IO String -> IO Bool
@@ -97,6 +99,12 @@ read = Prelude.read
 bind :: (Monad m) => m a -> (a -> m b) -> m b
 bind = (Prelude.>>=)
 
-ap :: IO (a -> b) -> IO a -> IO b
-ap = (Prelude.<*>)
+class Ap a b c | a b -> c where
+  ap :: a -> b -> c
+
+instance (a ~ a', b ~ b') => Ap (IO (a -> IO b)) (IO a') (IO b') where
+  ap mk ma = join (mk <*> ma)
+
+instance (a ~ a', b ~ b') => Ap (IO (a -> b)) (IO a') (IO b') where
+  ap mf mx = mf <*> mx
 

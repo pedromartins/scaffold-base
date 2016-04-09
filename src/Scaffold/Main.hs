@@ -30,6 +30,7 @@ main = do
         (sensors, actuators) <- readConfig
         mapM (\(s,sd,u) -> remoteRegister (NodeCapRecord (Just ip) (Provides s) sd u)) sensors
         mapM (\(c,sc,u) -> remoteRegister (NodeCapRecord (Just ip) (IsCapableOf c) sc u)) actuators
+        remoteRegister (NodeCapRecord (Just ip) Any "" "scaffold")
         threadDelay 60000000
     , name = Just "scaffold"
     , SPD.user = Just "scaffold"
