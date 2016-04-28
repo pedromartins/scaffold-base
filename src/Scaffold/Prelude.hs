@@ -79,8 +79,8 @@ readIORef = Data.IORef.readIORef
 ret :: a -> IO a
 ret = Prelude.return
 
-threshold :: IO String -> IO Bool
-threshold mi = mi Prelude.>>= (Prelude.return Prelude.. (>500) Prelude.. Prelude.read)
+threshold :: String -> Bool
+threshold = ((>500) Prelude.. Prelude.read)
 
 execve = undefined
 
@@ -102,10 +102,14 @@ bind = (Prelude.>>=)
 class Ap a b c | a b -> c where
   ap :: a -> b -> c
 
+instance (a ~ a', b ~ b') => Ap (IO (a -> b)) (IO a') (IO b') where
+  ap mf mx = mf <*> mx
+
 instance (a ~ a', b ~ b') => Ap (IO (a -> IO b)) (IO a') (IO b') where
   ap mk ma = join (mk <*> ma)
 
-instance (a ~ a', b ~ b') => Ap (IO (a -> b)) (IO a') (IO b') where
-  ap mf mx = mf <*> mx
+-- Currently broken, special case added to parser for 'forever'
+-- instance (a ~ a', b ~ b') => Ap (IO (IO a -> IO b)) (IO a') (IO b') where
+--   ap mk ma = join (mk <*> (Prelude.return ma))
 
 type IntT = Integer
