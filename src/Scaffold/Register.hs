@@ -59,12 +59,6 @@ readConfig = do
   actuators <- mapM readActuatorConfig actuatorFiles
   return (sensors, actuators)
 
--- Copied from directory-1.2.5.0 to avoid dependency hell
-listDirectory :: FilePath -> IO [FilePath]
-listDirectory path =
-    (filter f) <$> (getDirectoryContents path)
-      where f filename = filename /= "." && filename /= ".."
-
 isFile = doesFileExist
 isDirectory = fmap not . doesFileExist
 
